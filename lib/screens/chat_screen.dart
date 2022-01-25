@@ -6,12 +6,23 @@ class Chatscreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView.builder(
-          itemCount: 10,
-          itemBuilder: (ctx, index) => Container(
-                padding: EdgeInsets.all(8),
-                child: Text('this works!'),
-              )),
+      //streambuilder revaluates the builder whenever our stream gets changed
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance
+            .collection('chats/73zO0c4wyXnTNPREyxgA/messages')
+            .snapshots(includeMetadataChanges: true),
+        //AsyncSnapshot<QuerySnapshot> is necessary before streamsnapshots
+        builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshots) {
+          if (streamSnapshots.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          }
+          return ListView.builder(
+              itemCount: streamSnapshots.data!.docs.length,
+              itemBuilder: (ctx, index) => Container(
+                  padding: EdgeInsets.all(8),
+                  child: Text(streamSnapshots.data!.docs[index]['text'])));
+        },
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           //for this remember to initialize firebase app in main.dart
@@ -19,7 +30,7 @@ class Chatscreen extends StatelessWidget {
               .collection('chats/73zO0c4wyXnTNPREyxgA/messages')
               .snapshots()
               .listen((data) {
-            // print(data.docs[0]['text']);
+            print(data.docs);
             data.docs.forEach((element) {
               print(element['text']);
             });
