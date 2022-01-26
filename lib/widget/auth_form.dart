@@ -37,7 +37,7 @@ class _AuthFormState extends State<AuthForm> {
                     if (value!.isEmpty || value.length < 8) {
                       return 'Password must be atleast seven characters';
                     }
-                    return null; //means everything is alright
+                    return null; //means everything is alright.
                   },
                   decoration: InputDecoration(labelText: 'Password'),
                   obscureText: true, //hide input text entered by user
