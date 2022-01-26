@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:chat_app/widget/chat/messages.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,7 +17,13 @@ class Chatscreen extends StatelessWidget {
                 FirebaseAuth.instance.signOut();
               }
             },
-            icon: Icon(Icons.more_vert),
+            icon: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Icon(
+                Icons.more_vert,
+                color: Colors.white,
+              ),
+            ),
             items: [
               DropdownMenuItem(
                 child: Container(
@@ -37,22 +44,14 @@ class Chatscreen extends StatelessWidget {
         ],
       ),
       //streambuilder revaluates the builder whenever our stream gets changed
-      body: StreamBuilder(
-        stream: FirebaseFirestore.instance
-            .collection('chats/73zO0c4wyXnTNPREyxgA/messages')
-            .snapshots(),
-        //AsyncSnapshot<QuerySnapshot> is necessary before streamsnapshots
-        builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshots) {
-          if (streamSnapshots.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          }
-          final documents = streamSnapshots.data!.docs;
-          return ListView.builder(
-              itemCount: documents.length,
-              itemBuilder: (ctx, index) => Container(
-                  padding: EdgeInsets.all(8),
-                  child: Text(documents[index]['text'])));
-        },
+      body: Container(
+        child: Column(
+          children: [
+            Expanded(
+              child: Messages(),
+            ),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

@@ -32,6 +32,7 @@ class _AuthScreeenState extends State<AuthScreeen> {
       if (isLogin) {
         authResult = await _auth.signInWithEmailAndPassword(
             email: email as String, password: password as String);
+        print(authResult.user);
       } else {
         authResult = await _auth.createUserWithEmailAndPassword(
             email: email as String, password: password as String);
