@@ -2,6 +2,7 @@ import 'package:chat_app/screens/auth_screen.dart';
 import 'package:chat_app/screens/chat_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,7 +29,18 @@ class MyApp extends StatelessWidget {
               textTheme: ButtonTextTheme.primary,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10)))),
-      home: AuthScreeen(),
+      home: StreamBuilder(
+          stream: FirebaseAuth.instance.authStateChanges(),
+          // this stream will emit a new value whenever the auth state changes
+          //authstatechange means whenever user signup,login,logout, and also
+          //will check while loading whether cached token is present or not
+          builder: (ctx, userSnapshot) {
+            if (userSnapshot.hasData) //means we found the token
+            {
+              return Chatscreen();
+            }
+            return AuthScreeen();
+          }),
     );
   }
 }
