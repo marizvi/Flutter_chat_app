@@ -1,8 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class MessageBubble extends StatelessWidget {
   final String message;
-  MessageBubble(this.message);
+  bool isMe;
+  MessageBubble(this.message, this.isMe);
+
   @override
   Widget build(BuildContext context) {
     return Container(

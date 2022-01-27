@@ -21,7 +21,8 @@ class Messages extends StatelessWidget {
         return ListView.builder(
           reverse: true,
           itemCount: chatDocs.length,
-          itemBuilder: (ctx, index) => MessageBubble(chatDocs[index]['text']),
+          itemBuilder: (ctx, index) =>
+              MessageBubble(chatDocs[index]['text'], chatDocs[index]['userId']),
         );
         // return Text('hello');
       },
