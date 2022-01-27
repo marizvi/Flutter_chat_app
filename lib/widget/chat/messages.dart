@@ -12,11 +12,13 @@ class Messages extends StatelessWidget {
           return Center(
             child: CircularProgressIndicator(),
           );
-        final chatDocs = chatSnapshots.data!.docs;
+        final chatDocs = chatSnapshots.data?.docs ?? [];
         return ListView.builder(
+          reverse: true,
           itemCount: chatDocs.length,
           itemBuilder: (ctx, index) => Text(chatDocs[index]['text']),
         );
+        // return Text('hello');
       },
     );
   }

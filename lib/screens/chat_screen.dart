@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:chat_app/widget/chat/messages.dart';
+import 'package:chat_app/widget/chat/new_message.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -50,17 +51,18 @@ class Chatscreen extends StatelessWidget {
             Expanded(
               child: Messages(),
             ),
+            NewMessage(),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          FirebaseFirestore.instance
-              .collection('chats/73zO0c4wyXnTNPREyxgA/messages')
-              .add({'text': 'This is the hard coded text'});
-        },
-        child: Icon(Icons.add),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     FirebaseFirestore.instance
+      //         .collection('chats/73zO0c4wyXnTNPREyxgA/messages')
+      //         .add({'text': 'This is the hard coded text'});
+      //   },
+      //   child: Icon(Icons.add),
+      // ),
     );
   }
 }
