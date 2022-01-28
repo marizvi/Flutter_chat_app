@@ -1,3 +1,4 @@
+import 'package:chat_app/widget/picker/user_image_picker.dart';
 import 'package:flutter/material.dart';
 
 class AuthForm extends StatefulWidget {
@@ -70,9 +71,9 @@ class _AuthFormState extends State<AuthForm>
         child: AnimatedContainer(
           duration: Duration(milliseconds: 260),
           curve: Curves.easeInOutQuad,
-          height: _isLogin ? 270 : 390,
+          height: _isLogin ? 400 : 520,
           child: Card(
-            margin: EdgeInsets.all(12),
+            margin: EdgeInsets.all(18),
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
             elevation: 15,
@@ -82,6 +83,7 @@ class _AuthFormState extends State<AuthForm>
                 child: Form(
                   key: _formKey,
                   child: Column(mainAxisSize: MainAxisSize.min, children: [
+                    UserImagePicker(),
                     TextFormField(
                         // key is necessary when we are changing number of
                         // textform fields dynamically, to prvent swapping of values
