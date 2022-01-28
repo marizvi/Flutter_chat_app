@@ -71,7 +71,7 @@ class _AuthFormState extends State<AuthForm>
         child: AnimatedContainer(
           duration: Duration(milliseconds: 260),
           curve: Curves.easeInOutQuad,
-          height: _isLogin ? 400 : 520,
+          height: _isLogin ? 290 : 520,
           child: Card(
             margin: EdgeInsets.all(18),
             shape:
@@ -83,7 +83,7 @@ class _AuthFormState extends State<AuthForm>
                 child: Form(
                   key: _formKey,
                   child: Column(mainAxisSize: MainAxisSize.min, children: [
-                    UserImagePicker(),
+                    if (!_isLogin) UserImagePicker(),
                     TextFormField(
                         // key is necessary when we are changing number of
                         // textform fields dynamically, to prvent swapping of values
