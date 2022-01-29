@@ -1,9 +1,10 @@
 import 'package:chat_app/widget/picker/user_image_picker.dart';
 import 'package:flutter/material.dart';
+import 'dart:io';
 
 class AuthForm extends StatefulWidget {
   final Function(String? email, String? password, String? username,
-      bool isLogin, BuildContext ctx) submitForm;
+      File? _userImage, bool isLogin, BuildContext ctx) submitForm;
   final bool _isLoading;
   AuthForm(this.submitForm, this._isLoading);
   @override
@@ -18,6 +19,11 @@ class _AuthFormState extends State<AuthForm>
   String? _userEmail = '';
   String? _userName = '';
   String? _userPassword = '';
+  File? _userImage;
+  void _pickedImage(File image) {
+    _userImage = image;
+  }
+
   AnimationController? controller;
   Animation<double>? _opacityAnimation;
   Animation<Offset>? _slideAnimation;
@@ -41,6 +47,15 @@ class _AuthFormState extends State<AuthForm>
     // .validate is a boolean type and will return true if all
     // validated fields return null
     final isValid = _formKey.currentState!.validate();
+
+    if (_userImage == null && !_isLogin) {
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content: Text('Please Pick an Image.'),
+        backgroundColor: Theme.of(context).errorColor,
+      ));
+      return;
+    }
+
     if (isValid) {
       // .save() will trigger onSaved: for all textFormField
       _formKey.currentState!.save();
@@ -49,6 +64,7 @@ class _AuthFormState extends State<AuthForm>
         _userEmail!.trim(),
         _userPassword!.trim(),
         _userName!.trim(),
+        _userImage,
         _isLogin,
         context,
       );
@@ -83,7 +99,7 @@ class _AuthFormState extends State<AuthForm>
                 child: Form(
                   key: _formKey,
                   child: Column(mainAxisSize: MainAxisSize.min, children: [
-                    if (!_isLogin) UserImagePicker(),
+                    if (!_isLogin) UserImagePicker(_pickedImage),
                     TextFormField(
                         // key is necessary when we are changing number of
                         // textform fields dynamically, to prvent swapping of values

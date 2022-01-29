@@ -1,7 +1,9 @@
 import 'package:chat_app/widget/auth_form.dart';
 import 'package:flutter/material.dart';
+import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class AuthScreeen extends StatefulWidget {
   @override
@@ -18,6 +20,7 @@ class _AuthScreeenState extends State<AuthScreeen> {
     String? email,
     String? password,
     String? username,
+    File? userImage,
     bool isLogin,
     BuildContext ctx,
   ) async {
@@ -36,6 +39,10 @@ class _AuthScreeenState extends State<AuthScreeen> {
       } else {
         authResult = await _auth.createUserWithEmailAndPassword(
             email: email as String, password: password as String);
+
+            //.ref() will point to root bucket
+          FirebaseStorage.instance.ref()
+
         await FirebaseFirestore.instance
             .collection(
                 'users') //if users collection is not present then it will be created
