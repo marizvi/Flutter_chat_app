@@ -40,8 +40,21 @@ class _AuthScreeenState extends State<AuthScreeen> {
         authResult = await _auth.createUserWithEmailAndPassword(
             email: email as String, password: password as String);
 
-            //.ref() will point to root bucket
-          FirebaseStorage.instance.ref()
+        //.ref() will point to root bucket
+        //.child() gives us path where we want ot store a file
+        //if path does not exist, it will be created
+        final ref = FirebaseStorage.instance
+            .ref()
+            .child('user_image')
+            .child(authResult.user!.uid + '.jpg'); //filename is in last child
+
+        //since putfile doesn't return a future that is y we are enclosing
+        //it in Future.value()
+        await Future.value(ref.putFile(
+          File(userImage!.path),
+        ));
+        final url = await ref.getDownloadURL();
+        //getting url so that we can view through it whenever needed
 
         await FirebaseFirestore.instance
             .collection(
@@ -50,6 +63,7 @@ class _AuthScreeenState extends State<AuthScreeen> {
             .set({
           'username': username,
           'email': email,
+          'image_url': url,
         });
       }
     } on FirebaseAuthException catch (err) {
