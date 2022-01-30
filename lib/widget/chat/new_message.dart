@@ -23,6 +23,7 @@ class _NewMessageState extends State<NewMessage> {
       'createdAt': Timestamp.now(), //cloud_firestore package
       'userId': user.uid,
       'username': userData['username'],
+      'userImage': userData['image_url'],
     });
     _controller.clear();
   }
