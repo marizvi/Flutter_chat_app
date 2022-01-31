@@ -1,5 +1,6 @@
 import 'package:chat_app/screens/auth_screen.dart';
 import 'package:chat_app/screens/chat_screen.dart';
+import 'package:chat_app/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -49,6 +50,8 @@ class MyApp extends StatelessWidget {
           //authstatechange means whenever user signup,login,logout, and also
           //will check while loading whether cached token is present or not
           builder: (ctx, userSnapshot) {
+            if (userSnapshot.connectionState == ConnectionState.waiting)
+              return SplashScreen();
             if (userSnapshot.hasData) //means we found the token
             {
               return Chatscreen();

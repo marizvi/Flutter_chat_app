@@ -37,6 +37,9 @@ class _NewMessageState extends State<NewMessage> {
         children: [
           Expanded(
             child: TextField(
+              //Defaults to an uppercase keyboard for the first letter of each sentence.
+              textCapitalization: TextCapitalization.sentences,
+              enableSuggestions: true,
               controller: _controller,
               decoration: InputDecoration(labelText: 'Send a message..'),
               onChanged: (value) {

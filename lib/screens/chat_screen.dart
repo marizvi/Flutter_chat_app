@@ -39,6 +39,7 @@ class _ChatscreenState extends State<Chatscreen> {
         title: Text('Flutter Chat'),
         actions: [
           DropdownButton(
+            underline: Container(), //to remove light bottom line
             onChanged: (itemidentifier) {
               if (itemidentifier == 'logout') {
                 FirebaseAuth.instance.signOut();

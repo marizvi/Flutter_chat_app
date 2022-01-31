@@ -105,6 +105,10 @@ class _AuthFormState extends State<AuthForm>
                         // textform fields dynamically, to prvent swapping of values
                         // among these fields
                         key: ValueKey('userEmail'),
+                        //few keyboard settings are below (optional)
+                        autocorrect: false,
+                        textCapitalization: TextCapitalization.none,
+                        enableSuggestions: false,
                         validator: (value) {
                           if (value!.isEmpty || !value.contains('@')) {
                             return 'Please enter a valid email address';
@@ -124,6 +128,10 @@ class _AuthFormState extends State<AuthForm>
                             // textform fields dynamically, to prvent swapping of values
                             // among these fields
                             key: ValueKey('userName'),
+                            autocorrect: true,
+                            // Defaults to an uppercase keyboard for the first letter of each word.
+                            textCapitalization: TextCapitalization.words,
+                            enableSuggestions: false,
                             validator: (value) {
                               if (value!.isEmpty || value.length < 4) {
                                 return 'Please enter at least 4 characters';
