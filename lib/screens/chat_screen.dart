@@ -14,6 +14,10 @@ class Chatscreen extends StatefulWidget {
 }
 
 class _ChatscreenState extends State<Chatscreen> {
+  void _selectPage() {
+    Navigator.of(context).pushNamed('/user_screen');
+  }
+
   //..................
   //flutter_local notification
   FlutterLocalNotificationsPlugin fltrNotification =
@@ -71,6 +75,10 @@ class _ChatscreenState extends State<Chatscreen> {
       appBar: AppBar(
         title: Text('Flutter Chat'),
         actions: [
+          ElevatedButton(
+            onPressed: _selectPage,
+            child: Icon(Icons.ac_unit),
+          ),
           DropdownButton(
             underline: Container(), //to remove light bottom line
             onChanged: (itemidentifier) {
