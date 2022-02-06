@@ -22,7 +22,7 @@ class _AuthScreeenState extends State<AuthScreeen> {
     String? username,
     File? userImage,
     bool isLogin,
-    BuildContext ctx,
+    BuildContext ctx, //for snack bar only
   ) async {
     UserCredential authResult;
     try {
@@ -40,7 +40,7 @@ class _AuthScreeenState extends State<AuthScreeen> {
         authResult = await _auth.createUserWithEmailAndPassword(
             email: email as String, password: password as String);
 
-        //.ref() will point to root bucket
+        //.ref() will point to root b2ucket
         //.child() gives us path where we want ot store a file
         //if path does not exist, it will be created
         final ref = FirebaseStorage.instance
