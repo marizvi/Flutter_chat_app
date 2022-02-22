@@ -1,6 +1,7 @@
 import 'package:chat_app/screens/auth_screen.dart';
 import 'package:chat_app/screens/chat_screen.dart';
 import 'package:chat_app/screens/splash_screen.dart';
+import 'package:chat_app/screens/user_chatscreen.dart';
 import 'package:chat_app/screens/users_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -60,6 +61,7 @@ class MyApp extends StatelessWidget {
             }),
         routes: {
           '/user_screen': (ctx) => UsersScreen(),
+          '/user_chatscreen': (ctx) => UserChatscreen(),
         });
   }
 }

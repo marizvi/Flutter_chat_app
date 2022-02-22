@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:chat_app/widget/chat/messages.dart';
 import 'package:chat_app/widget/chat/new_message.dart';
+import 'package:chat_app/widget/chat/user_message.dart';
+import 'package:chat_app/widget/chat/user_newmsg.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -8,12 +10,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-class Chatscreen extends StatefulWidget {
+class UserChatscreen extends StatefulWidget {
   @override
-  State<Chatscreen> createState() => _ChatscreenState();
+  State<UserChatscreen> createState() => _ChatscreenState();
 }
 
-class _ChatscreenState extends State<Chatscreen> {
+class _ChatscreenState extends State<UserChatscreen> {
   void _selectPage() {
     Navigator.of(context).pushNamed('/user_screen');
   }
@@ -47,7 +49,7 @@ class _ChatscreenState extends State<Chatscreen> {
     // in notification bar while running an app
     // through FLutter local notificaiton
     // otherwise firebase part has nothing to do with this
-    // actual code, both background and terminated background 
+    // actual code, both background and terminated background
     // is handled through .xml and gradle file only
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
@@ -78,14 +80,15 @@ class _ChatscreenState extends State<Chatscreen> {
 
   @override
   Widget build(BuildContext context) {
+    final route =
+        ModalRoute.of(context)!.settings.arguments as Map<String, String>;
+    final userid = route['userid'];
+    final myid = route['myid'];
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Flutter Chat'),
         actions: [
-          ElevatedButton(
-            onPressed: _selectPage,
-            child: Icon(Icons.ac_unit),
-          ),
           DropdownButton(
             underline: Container(), //to remove light bottom line
             onChanged: (itemidentifier) {
@@ -124,9 +127,9 @@ class _ChatscreenState extends State<Chatscreen> {
         child: Column(
           children: [
             Expanded(
-              child: Messages(),
+              child: UserMessages(userid.toString(), myid.toString()),
             ),
-            NewMessage(),
+            UserNewMsg(userid.toString()),
           ],
         ),
       ),

@@ -1,5 +1,6 @@
 import 'package:chat_app/widget/user_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class UsersScreen extends StatefulWidget {
@@ -10,20 +11,24 @@ class UsersScreen extends StatefulWidget {
 class _UsersScreenState extends State<UsersScreen> {
   var _users = [];
   var _id = [];
+  String? myid;
   Future<void> _fetchUsers() async {
     print('inside fetch users');
     QuerySnapshot querySnapshot_data =
         await FirebaseFirestore.instance.collection('users').get();
+    // print(querySnapshot_data.docs.length);
     _users = querySnapshot_data.docs.map((e) => e.data()).toList();
     QuerySnapshot querySnapshot_id =
         await FirebaseFirestore.instance.collection('users').get();
     _id = querySnapshot_id.docs.map((e) => e.id).toList();
+    myid = FirebaseAuth.instance.currentUser!.uid;
   }
 
   @override
   Widget build(BuildContext context) {
-    // print('users:');
+    // print(_id);
     // print(_users);
+    // print(myid);
     return Scaffold(
         appBar: AppBar(
           title: Text('Users..'),
@@ -38,10 +43,13 @@ class _UsersScreenState extends State<UsersScreen> {
               else {
                 return ListView.builder(
                   itemCount: _users.length,
-                  itemBuilder: (context, index) => UserWidget(
-                      _users[index]['image_url'],
-                      _users[index]['username'],
-                      _id[index]),
+                  itemBuilder: (context, index) => _id[index] != myid
+                      ? UserWidget(
+                          _users[index]['image_url'],
+                          _users[index]['username'],
+                          _id[index],
+                          myid.toString())
+                      : Center(),
                 );
               }
             }));

@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 class UserWidget extends StatelessWidget {
   final String img_url;
   final String name;
-  final String id;
-  UserWidget(this.img_url, this.name, this.id);
+  final String userid;
+  final String myid;
+  UserWidget(this.img_url, this.name, this.userid, this.myid);
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -15,14 +16,20 @@ class UserWidget extends StatelessWidget {
       child: Container(
         child: ListTile(
           onTap: () {
-            print('hello');
+            Navigator.of(context).pushNamed('/user_chatscreen',
+                arguments: {'userid': userid, 'myid': myid});
           },
           leading: CircleAvatar(
             radius: 25,
             backgroundImage: NetworkImage(img_url),
           ),
           title: Text(name),
-          subtitle: Text(id),
+          subtitle: Column(
+            children: [
+              Text("My id: $myid"),
+              Text("User id $userid"),
+            ],
+          ),
         ),
       ),
     );

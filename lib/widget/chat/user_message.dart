@@ -5,7 +5,10 @@ import 'package:flutter/material.dart';
 
 import 'message_bubble.dart';
 
-class Messages extends StatelessWidget {
+class UserMessages extends StatelessWidget {
+  final String userid;
+  final String myid;
+  UserMessages(this.userid, this.myid);
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -28,15 +31,28 @@ class Messages extends StatelessWidget {
                   child: CircularProgressIndicator(),
                 );
               // print(chatSnapshots.data?.docs[0].data());
-              final chatDocs = chatSnapshots.data?.docs ?? [];
+              // final chatDocs = chatSnapshots.data?.docs ?? [];
+              List<dynamic> chatDocs1 = chatSnapshots.data?.docs
+                  .map((e) => e.data())
+                  .toList() as List<dynamic>;
+              final allmsgs = chatDocs1.where((element) {
+                if (element['myid'] == myid || element['oppositeid'] == myid) {
+                  return true;
+                }
+                return false;
+              }).toList();
+              print(userid);
+              print(myid);
+              print(allmsgs);
+              // final chatDocs = allmsgs;
               return ListView.builder(
                 reverse: true,
-                itemCount: chatDocs.length,
+                itemCount: allmsgs.length,
                 itemBuilder: (ctx, index) => MessageBubble(
-                    chatDocs[index]['text'],
-                    chatDocs[index]['userImage'],
-                    chatDocs[index]['userId'] == futuresnapshot.data!.uid,
-                    chatDocs[index]['username']),
+                    allmsgs[index]['text'],
+                    allmsgs[index]['userImage'],
+                    allmsgs[index]['userId'] == futuresnapshot.data!.uid,
+                    allmsgs[index]['username']),
               );
               // return Text('hello');
             },
