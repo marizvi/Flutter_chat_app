@@ -11,6 +11,25 @@ class UserNewMsg extends StatefulWidget {
 
 class _NewMessageState extends State<UserNewMsg> {
   var _enteredMessage = '';
+  Future<String> getChatroomId() async {
+    final user = await FirebaseAuth.instance.currentUser;
+    // List<String> ids = [user!.uid, widget.oppositeid];
+    // ids.sort();
+    // String chatroomid = ids[0] + ids[1];
+    // return chatroomid;
+    String chatRoom;
+    String str1 = user!.uid;
+    String str2 = widget.oppositeid;
+    // <0 if str1<str2
+    // >0 if str1>str2
+    if (str1.compareTo(str2) == -1) {
+      chatRoom = str1 + str2;
+    } else {
+      chatRoom = str2 + str1;
+    }
+    return chatRoom;
+  }
+
   final _controller = new TextEditingController();
   void _sendMessage() async {
     FocusScope.of(context).unfocus(); //to close the keyboard
@@ -19,13 +38,17 @@ class _NewMessageState extends State<UserNewMsg> {
         .collection('users')
         .doc(user!.uid)
         .get();
-    FirebaseFirestore.instance.collection('chat').add({
+
+    String chatRoomId = await getChatroomId();
+    FirebaseFirestore.instance
+        .collection('chatRoom')
+        .doc(chatRoomId)
+        .collection('chats')
+        .add({
       'text': _enteredMessage,
       //we creating this below field extra to maintain proper order
       'createdAt': Timestamp.now(), //cloud_firestore package
       'userId': user.uid,
-      'myid': user.uid,
-      'oppositeid': widget.oppositeid,
       'username': userData['username'],
       'userImage': userData['image_url'],
     });

@@ -10,11 +10,36 @@ class UserMessages extends StatelessWidget {
   final String myid;
   UserMessages(this.userid, this.myid);
   @override
+  Future<String> getChatroomId() async {
+    final user = await FirebaseAuth.instance.currentUser;
+    // List<String> ids = [user!.uid, widget.oppositeid];
+    // ids.sort();
+    // String chatroomid = ids[0] + ids[1];
+    // return chatroomid;
+    String chatRoom;
+    String str1 = myid;
+    String str2 = userid;
+    // <0 if str1<str2
+    // >0 if str1>str2
+    if (str1.compareTo(str2) == -1) {
+      chatRoom = str1 + str2;
+    } else {
+      chatRoom = str2 + str1;
+    }
+    return chatRoom;
+  }
+
+  String? chatRoomId;
+
+  Future<void> _getResponse() async {
+    chatRoomId = await getChatroomId();
+  }
+
   Widget build(BuildContext context) {
     return FutureBuilder(
         //future builder is just for aligning my text towards right
-        future: Future.value(FirebaseAuth.instance.currentUser),
-        builder: (context, AsyncSnapshot<User?> futuresnapshot) {
+        future: _getResponse(),
+        builder: (context, futuresnapshot) {
           if (futuresnapshot.connectionState == ConnectionState.waiting) {
             return Center(
               child: CircularProgressIndicator(),
@@ -22,7 +47,9 @@ class UserMessages extends StatelessWidget {
           }
           return StreamBuilder(
             stream: FirebaseFirestore.instance
-                .collection('chat')
+                .collection('chatRoom')
+                .doc(chatRoomId)
+                .collection('chats')
                 .orderBy('createdAt', descending: true)
                 .snapshots(),
             builder: (ctx, AsyncSnapshot<QuerySnapshot> chatSnapshots) {
@@ -30,29 +57,30 @@ class UserMessages extends StatelessWidget {
                 return Center(
                   child: CircularProgressIndicator(),
                 );
-              // print(chatSnapshots.data?.docs[0].data());
+              // print(chatSnapshots.data?.docs[1].data());
               // final chatDocs = chatSnapshots.data?.docs ?? [];
               List<dynamic> chatDocs1 = chatSnapshots.data?.docs
                   .map((e) => e.data())
                   .toList() as List<dynamic>;
-              final allmsgs = chatDocs1.where((element) {
-                if (element['myid'] == myid || element['oppositeid'] == myid) {
-                  return true;
-                }
-                return false;
-              }).toList();
-              print(userid);
-              print(myid);
-              print(allmsgs);
+
+              // final allmsgs = chatDocs1.where((element) {
+              //   if (element['myid'] == myid || element['oppositeid'] == myid) {
+              //     return true;
+              //   }
+              //   return false;
+              // }).toList();
+              // print(userid);
+              // print(myid);
+              // print(allmsgs);
               // final chatDocs = allmsgs;
               return ListView.builder(
                 reverse: true,
-                itemCount: allmsgs.length,
+                itemCount: chatDocs1.length,
                 itemBuilder: (ctx, index) => MessageBubble(
-                    allmsgs[index]['text'],
-                    allmsgs[index]['userImage'],
-                    allmsgs[index]['userId'] == futuresnapshot.data!.uid,
-                    allmsgs[index]['username']),
+                    chatDocs1[index]['text'],
+                    chatDocs1[index]['userImage'],
+                    chatDocs1[index]['userId'] == myid,
+                    chatDocs1[index]['username']),
               );
               // return Text('hello');
             },

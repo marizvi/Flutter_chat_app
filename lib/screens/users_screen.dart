@@ -32,6 +32,39 @@ class _UsersScreenState extends State<UsersScreen> {
     return Scaffold(
         appBar: AppBar(
           title: Text('Users..'),
+          actions: [
+            DropdownButton(
+              underline: Container(), //to remove light bottom line
+              onChanged: (itemidentifier) {
+                if (itemidentifier == 'logout') {
+                  FirebaseAuth.instance.signOut();
+                }
+              },
+              icon: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Icon(
+                  Icons.more_vert,
+                  color: Colors.white,
+                ),
+              ),
+              items: [
+                DropdownMenuItem(
+                  child: Container(
+                    child: Row(
+                      children: [
+                        Icon(Icons.exit_to_app),
+                        SizedBox(
+                          width: 8,
+                        ),
+                        Text('Logout'),
+                      ],
+                    ),
+                  ),
+                  value: 'logout',
+                )
+              ],
+            )
+          ],
         ),
         body: FutureBuilder(
             future: _fetchUsers(),
