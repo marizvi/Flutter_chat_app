@@ -39,6 +39,8 @@ class UserMessages extends StatelessWidget {
     return FutureBuilder(
         //future builder is just for aligning my text towards right
         future: _getResponse(),
+        // future: Future.value(FirebaseAuth.instance.currentUser),
+        // builder: (context, AsyncSnapshot<User?> futuresnapshot) {
         builder: (context, futuresnapshot) {
           if (futuresnapshot.connectionState == ConnectionState.waiting) {
             return Center(

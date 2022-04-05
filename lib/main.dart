@@ -55,7 +55,7 @@ class MyApp extends StatelessWidget {
                 return SplashScreen();
               if (userSnapshot.hasData) //means we found the token
               {
-                return UsersScreen();
+                return Chatscreen();
               }
               return AuthScreeen();
             }),
