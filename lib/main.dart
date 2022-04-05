@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // If you're going to use other Firebase services in the background, such as Firestore,
@@ -55,7 +54,7 @@ class MyApp extends StatelessWidget {
                 return SplashScreen();
               if (userSnapshot.hasData) //means we found the token
               {
-                return Chatscreen();
+                return UsersScreen();
               }
               return AuthScreeen();
             }),
